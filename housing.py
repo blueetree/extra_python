@@ -119,8 +119,7 @@ pca.fit(feature_scaled)
 feature_scaled_pca = pca.transform(feature_scaled)
 print("shape of the scaled and 'PCA'ed features: ", np.shape(feature_scaled_pca))
 
-# Let's see the variance to see out of the
-# 4 components which are contributing most
+# Components contribution
 feat_var = np.var(feature_scaled_pca, axis=0)
 feat_var_rat = feat_var/(np.sum(feat_var))
 print ("Variance Ratio of the 4 Principal Components Ananlysis: ", feat_var_rat)
