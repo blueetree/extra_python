@@ -40,6 +40,7 @@ df['quit_date'] = pd.to_datetime(df['quit_date'], errors='coerce')
 temp_df = df.copy()
 temp_df['join_date'] = temp_df['join_date'].dt.date
 temp_df['quit_date'] = temp_df['quit_date'].dt.date
+# 1
 # create date list
 dates = pd.date_range(start='2011/01/24', end='2015/12/13')
 temp = {'date' : dates}
@@ -74,39 +75,25 @@ test.drop(['number_quit','number_join'],1, inplace=True)
 employee_count_table = test.groupby(['date', 'company_id']).sum().groupby(['company_id']).cumsum()
 employee_count_table.reset_index(inplace=True)
 
-# import datetime
-# st = datetime.date(2011, 1, 24)
-# end = datetime.date(2015, 12, 13)
-# step = datetime.timedelta(days=1)
-# date_list = []
-# while st < end:
-#     date_list.append(st)
-#     st += step
-# headcount_df = pd.DataFrame(columns=['day', 'employee_headcount', 'company_id'])
-# headcount = 0
-# company_ids = temp_df['company_id'].unique()
-# # the first row
-# for c in company_ids:
-#     for j in temp_df['join_date']:
-#         if j == datetime.date(2011, 1, 24):
-#             headcount += 1
-#     headcount_df = headcount_df.append({'day': datetime.date(2011, 1, 24),
-#                                         'employee_headcount': headcount, 'company_id': c}, ignore_index=True)
-#     headcount = 0
-# # following rows
-# for d in date_list[1:]:
-#     for c in company_ids:
-#         headcount += len(temp_df[(temp_df['join_date'] == d) & (temp_df['company_id'] == c)])
-#         headcount -= len(temp_df[(temp_df['quit_date'] == d) & (temp_df['company_id'] == c)])
-#         day = d - datetime.timedelta(days=1)
-#         ori = headcount_df[(headcount_df['day'] == day) & (headcount_df['company_id'] == c)]['employee_headcount']
-#         total = int(ori.values) + headcount
-#         print(d, c, total)
-#         headcount_df = headcount_df.append({'day': d,
-#                                             'employee_headcount': total,
-#                                             'company_id': c}, ignore_index=True)
-#         headcount = 0
-# headcount_df.to_csv('headcount.csv', index=False)
+# 2
+# unique_date = pd.date_range(start='2011-01-24', end='2015-12-13', freq='D')
+# unique_company = sorted(data['company_id'].unique())
+
+# day = []
+# company = []
+# headcount = []
+
+# # Loop through date and company id
+# for date in unique_date:
+#     for idx in unique_company:
+#         total_join = len(data[(data['join_date'] <= date) & (data['company_id'] == idx)])
+#         total_quit = len(data[(data['quit_date'] <= date) & (data['company_id'] == idx)])
+#         day.append(date)
+#         company.append(idx)
+#         headcount.append(total_join - total_quit)
+
+# table = pd.DataFrame({'day': day, 'company_id': company, 'employee_headcount': headcount}, 
+#                      columns=['day', 'company_id', 'employee_headcount'])
 
 ##############################
 # EDA
